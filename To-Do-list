@@ -1,0 +1,50 @@
+import os
+
+FILE_NAME = "tasks.txt"
+
+def load_tasks():
+    tasks = []
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r") as file:
+            for line in file:
+                task, category, priority = line.strip().split("|")
+                tasks.append({"task": task, "category": category, "priority": priority})
+    return tasks
+
+def save_tasks(tasks):
+    with open(FILE_NAME, "w") as file:
+        for task in tasks:
+            file.write(f'{task["task"]}|{task["category"]}|{task["priority"]}\n')
+
+def add_task(tasks):
+    task = input("Enter the task: ")
+    category = input("Enter the category (e.g., work, personal): ")
+    priority = input("Enter the priority (low, medium, high): ").lower()
+    tasks.append({"task": task, "category": category, "priority": priority})
+    save_tasks(tasks)
+
+def view_tasks(tasks):
+    if not tasks:
+        print("No tasks to show.")
+    else:
+        for i, task in enumerate(tasks, 1):
+            print(f"{i}. [{task['category']}] {task['task']} - Priority: {task['priority']}")
+
+def main():
+    tasks = load_tasks()
+    while True:
+        print("\n1. Add task\n2. View tasks\n3. Exit")
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            add_task(tasks)
+        elif choice == "2":
+            view_tasks(tasks)
+        elif choice == "3":
+            print("Exiting To-Do List.")
+            break
+        else:
+            print("Invalid choice.")
+
+if __name__ == "__main__":
+    main()
